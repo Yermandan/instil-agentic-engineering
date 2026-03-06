@@ -17,6 +17,15 @@ export function initRailNav() {
       const el = document.getElementById(id);
       if (!el) return;
 
+      // Special case: scroll to absolute top for intro
+      if (id === 'section-intro') {
+        window.scrollTo({ 
+          top: 0, 
+          behavior: 'smooth' 
+        });
+        return;
+      }
+
       // Calculate position to center section in viewport
       const rect = el.getBoundingClientRect();
       const absoluteTop = window.scrollY + rect.top;
@@ -52,14 +61,21 @@ export function initRailNav() {
 
   // Scroll-spy: activate section nearest to viewport center
   function onScroll() {
-    const viewportCenter = window.scrollY + (window.innerHeight / 2);
+    const scrollY = window.scrollY;
+    const viewportCenter = scrollY + (window.innerHeight / 2);
+    
+    // Special case: if near top of page, activate intro
+    if (scrollY < window.innerHeight / 3) {
+      setActive('section-intro');
+      return;
+    }
     
     let closestSection = sections[0];
     let closestDistance = Infinity;
 
     for (const section of sections) {
       const rect = section.el.getBoundingClientRect();
-      const absoluteTop = window.scrollY + rect.top;
+      const absoluteTop = scrollY + rect.top;
       const sectionCenter = absoluteTop + (rect.height / 2);
       const distance = Math.abs(sectionCenter - viewportCenter);
 
