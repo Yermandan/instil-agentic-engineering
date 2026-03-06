@@ -1,9 +1,7 @@
 /**
  * Right-rail navigation – smooth scroll + active-section highlighting.
- * Uses scroll-position-based detection for reliable section tracking.
+ * Centers sections in viewport based on geometry, not hardcoded offsets.
  */
-
-const MENU_ALIGNMENT_OFFSET = 250; // Align sections with menu position
 
 export function initRailNav() {
   const rail = document.getElementById('railNav');
@@ -11,28 +9,29 @@ export function initRailNav() {
 
   const items = Array.from(rail.querySelectorAll('.rail-pill'));
 
-  // Smooth-scroll on click with offset to align with menu (or center for delivery cycle)
+  // Smooth-scroll on click: center the section in viewport
   items.forEach((a) => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const id = a.getAttribute('data-target');
       const el = document.getElementById(id);
-      if (el) {
-        let targetPosition;
-        if (id === 'section-cycle') {
-          // Center the middle of the Delivery Cycle element with viewport center
-          const elementCenter = el.offsetTop + (el.offsetHeight / 2);
-          const viewportCenter = window.innerHeight / 2;
-          targetPosition = elementCenter - viewportCenter;
-        } else {
-          // Align other sections with menu position
-          targetPosition = el.offsetTop - MENU_ALIGNMENT_OFFSET;
-        }
-        window.scrollTo({ 
-          top: targetPosition, 
-          behavior: 'smooth' 
-        });
-      }
+      if (!el) return;
+
+      // Calculate position to center section in viewport
+      const rect = el.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const elementCenter = absoluteTop + (rect.height / 2);
+      const viewportCenter = window.innerHeight / 2;
+      let targetY = elementCenter - viewportCenter;
+
+      // Clamp to document bounds
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      targetY = Math.max(0, Math.min(targetY, maxScroll));
+
+      window.scrollTo({ 
+        top: targetY, 
+        behavior: 'smooth' 
+      });
     });
   });
 
@@ -51,43 +50,26 @@ export function initRailNav() {
     );
   }
 
-  // Scroll-spy: find which section is currently in the viewport
+  // Scroll-spy: activate section nearest to viewport center
   function onScroll() {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const docHeight = document.documentElement.scrollHeight;
+    const viewportCenter = window.scrollY + (window.innerHeight / 2);
+    
+    let closestSection = sections[0];
+    let closestDistance = Infinity;
 
-    // At bottom of page, activate last section
-    if (scrollY + viewportHeight >= docHeight - 50) {
-      setActive(sections[sections.length - 1].id);
-      return;
-    }
+    for (const section of sections) {
+      const rect = section.el.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const sectionCenter = absoluteTop + (rect.height / 2);
+      const distance = Math.abs(sectionCenter - viewportCenter);
 
-    let currentId = sections[0].id;
-
-    // Check each section with its appropriate trigger offset
-    for (const { id, el } of sections) {
-      let trigger;
-      if (id === 'section-cycle') {
-        // For Delivery Cycle, activate when element center aligns with viewport center
-        const elementCenter = el.offsetTop + (el.offsetHeight / 2);
-        const viewportCenter = scrollY + (viewportHeight / 2);
-        trigger = elementCenter;
-        if (viewportCenter >= trigger) {
-          currentId = id;
-        }
-      } else {
-        // For other sections, use standard menu alignment
-        trigger = scrollY + MENU_ALIGNMENT_OFFSET;
-        if (el.offsetTop <= trigger) {
-          currentId = id;
-        } else {
-          break;
-        }
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestSection = section;
       }
     }
 
-    setActive(currentId);
+    setActive(closestSection.id);
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });

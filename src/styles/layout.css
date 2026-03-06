@@ -1,9 +1,16 @@
-/* ── Layout: header, chapters, content bands, closing ── */
+/* ── Layout: brand, content grid, chapters, content bands ── */
+
+/* Page grid */
+.page-grid {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  width: 100%;
+}
 
 /* Chapter pacing */
 .chapter {
   padding: var(--chapter-pad) 0;
-  scroll-margin-top: 96px;
+  scroll-margin-top: 0;
 }
 
 .chapter:first-of-type {
@@ -11,41 +18,44 @@
   min-height: 100vh;
 }
 
-/* Header */
-.header {
-  max-width: var(--content-max);
-  margin: 0 auto;
-  width: 100%;
+/* Brand Block */
+.brand-block {
+  margin-bottom: 48px;
 }
 
-.header-logo {
-  height: 66px;
+.brand-logo {
+  height: 42px;
   width: auto;
   object-fit: contain;
-  display: block;
   opacity: 0.85;
+  display: block;
   margin-bottom: 8px;
 }
 
-[data-theme="light"] .header-logo {
+[data-theme="light"] .brand-logo {
   filter: invert(1);
 }
 
-[data-theme="dark"] .header-logo {
+[data-theme="dark"] .brand-logo {
   filter: none;
   opacity: 0.8;
 }
 
-.header-eyebrow {
+.brand-subline {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 32px;
 }
 
-.header h1 {
+/* Intro Block */
+.intro-block {
+  max-width: 650px;
+  margin-left: 0;
+}
+
+.intro-block h1 {
   font-family: var(--font-heading);
   font-size: clamp(30px, 4.5vw, 52px);
   font-weight: 300;
@@ -54,23 +64,21 @@
   margin-top: 25vh;
   margin-bottom: 32px;
   letter-spacing: -1.2px;
-  max-width: 720px;
   cursor: pointer;
 }
 
-.header h1 #splitFlapTitle {
+.intro-block h1 #splitFlapTitle {
   display: inline-block;
   position: relative;
   min-width: 240px;
   text-align: left;
 }
 
-.header p {
+.intro-block p {
   font-size: 17px;
   color: var(--text-secondary);
   line-height: 1.6;
   font-weight: 400;
-  max-width: 650px;
 }
 
 /* Content band */

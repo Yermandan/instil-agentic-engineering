@@ -58,7 +58,7 @@
 /* Practice cards */
 .in-practice-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   background: var(--border);
   gap: 1px;
 }
