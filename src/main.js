@@ -27,6 +27,7 @@ import { initProgress } from './js/progress.js';
 import { initReveal } from './js/reveal.js';
 import { initAnimatedNoise } from './js/animated-noise.js';
 import { initSplitFlapTitle } from './js/split-flap-title.js';
+import { initGridInteraction } from './js/grid-interaction.js';
 
 // ── Boot ──
 initTheme();
@@ -37,3 +38,4 @@ initProgress();
 initReveal();
 initAnimatedNoise();
 initSplitFlapTitle();
+initGridInteraction();
