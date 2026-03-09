@@ -20,6 +20,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   padding: 60px 40px 96px;
+  padding-right: 180px; /* Extra space for rail nav */
   -webkit-font-smoothing: antialiased;
   transition: background 0.5s ease, color 0.3s ease;
   position: relative;

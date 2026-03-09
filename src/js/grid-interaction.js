@@ -74,8 +74,8 @@ export function initGridInteraction() {
     const now = Date.now();
     
     nearbyCells.forEach(cell => {
-      if (cell.alpha < 0.15) {
-        cell.alpha = Math.min(0.15, cell.alpha + 0.15);
+      if (cell.alpha < 0.23) {
+        cell.alpha = Math.min(0.23, cell.alpha + 0.23);
         cell.lastTouched = now;
         cell.fading = false;
       }
@@ -106,8 +106,8 @@ export function initGridInteraction() {
       if (cell.alpha > 0) {
         // Grid reveal effect - visible only through interaction
         const color = dark 
-          ? `rgba(255, 255, 255, ${cell.alpha * 0.175})` 
-          : `rgba(0, 0, 0, ${cell.alpha * 0.125})`;
+          ? `rgba(255, 255, 255, ${cell.alpha * 0.25})` 
+          : `rgba(0, 0, 0, ${cell.alpha * 0.15})`;
         
         ctx.strokeStyle = color;
         ctx.lineWidth = 1;

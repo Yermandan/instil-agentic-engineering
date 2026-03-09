@@ -2,7 +2,7 @@
 
 .rail {
   position: fixed;
-  right: 16px;
+  right: 32px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 135;
