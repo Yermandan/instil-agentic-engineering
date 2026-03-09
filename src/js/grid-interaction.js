@@ -24,6 +24,16 @@ export function initGridInteraction() {
   let mouse = { x: -9999, y: -9999 };
   const cellSize = 60; // Match existing grid
   const grid = [];
+  let gradient;
+
+  // Create gradient once
+  function createGradient() {
+    gradient = ctx.createLinearGradient(0, 0, window.innerWidth, 0);
+    // Purple -> Magenta -> Red/Orange gradient
+    gradient.addColorStop(0, 'rgba(120, 40, 180, 1)');     // Deep purple
+    gradient.addColorStop(0.5, 'rgba(200, 60, 140, 1)');   // Magenta
+    gradient.addColorStop(1, 'rgba(240, 80, 80, 1)');      // Red/orange
+  }
 
   // Detect theme
   function isDarkTheme() {
@@ -53,6 +63,7 @@ export function initGridInteraction() {
       const dx = (cell.x + cellSize / 2) - mx;
       const dy = (cell.y + cellSize / 2) - my;
       return Math.sqrt(dx * dx + dy * dy) < radius;
+    createGradient();
     });
   }
 
@@ -104,20 +115,29 @@ export function initGridInteraction() {
       }
 
       if (cell.alpha > 0) {
-        // Grid reveal effect - visible only through interaction
-        const color = dark 
-          ? `rgba(255, 255, 255, ${cell.alpha * 0.25})` 
-          : `rgba(0, 0, 0, ${cell.alpha * 0.15})`;
+        // Grid reveal effect - gradient as mask (TESTING - FULL STRENGTH)
+        const baseAlpha = dark ? cell.alpha * 1.0 : cell.alpha * 0.15;
         
-        ctx.strokeStyle = color;
+        if (dark) {
+          // Use gradient with alpha for dark theme
+          ctx.globalAlpha = baseAlpha;
+          ctx.strokeStyle = gradient;
+        } else {
+          // Use solid color for light theme
+          ctx.globalAlpha = 1;
+          ctx.strokeStyle = `rgba(0, 0, 0, ${baseAlpha})`;
+        }
+        
         ctx.lineWidth = 1;
         ctx.strokeRect(cell.x + 0.5, cell.y + 0.5, cellSize - 1, cellSize - 1);
+        ctx.globalAlpha = 1; // Reset
       }
     }
 
     requestAnimationFrame(animate);
   }
 
+  createGradient();
   initGrid();
   animate();
 }

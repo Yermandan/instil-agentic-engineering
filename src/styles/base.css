@@ -19,29 +19,25 @@ body {
   background: var(--bg);
   color: var(--text-primary);
   min-height: 100vh;
-  padding: 60px 40px 96px;
+  padding: 30px 40px 96px;
   padding-right: 180px; /* Extra space for rail nav */
   -webkit-font-smoothing: antialiased;
   transition: background 0.5s ease, color 0.3s ease;
   position: relative;
 }
 
-/* Grid background pattern - faded to be revealed by interaction */
+/* Grid background pattern - removed, using interactive gradient grid only */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: 
-    linear-gradient(to right, oklch(0.2 0 0) 1px, transparent 1px),
-    linear-gradient(to bottom, oklch(0.2 0 0) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.13;
+  opacity: 0;
 }
 
 [data-theme="dark"] body::before {
-  opacity: 0.13;
+  opacity: 0;
 }
 
 .page {
